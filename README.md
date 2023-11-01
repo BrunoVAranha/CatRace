@@ -1,34 +1,45 @@
-# Simbolo UFABC
+# Corrida de Gatos
 ## Nome: Bruno Valem Aranha
 ## RA: 11039116
 Projeto para a disciplina de Computação Gráfica na UFABC.
-O projeto foi baseado no triângulo de sierpinski mostrado em aula.
 
 # Etapas de Funcionamento
 ## 1.
-No cabeçalho é criado um vetor que armazena os pontos do triângulo onde o simbolo será desenhado.  
+No cabeçalho (window.hpp) é criado um struct para representar cada gato, e uma variavel `fimCorrida` que indica se os gatos continuam se movendo ou não.  
 Também é criada a variável `m_P`, um vetor de duas posições que vai armazenar as coordenadas do ponto a ser desenhado quando o programa rodar.  
-Obs: O triângulo indicado no vetor não é desenhado! Ele serve apenas como referência para desenhar os três circulos posteriormente.  
-![image](https://github.com/BrunoVAranha/UfabcOpenGL/assets/49883183/2db199de-3e2f-49b5-ad5f-f6f9b5ca5706)
+Obs: O triângulo indicado no vetor não é desenhado! Ele serve apenas como referência para desenhar os três circulos posteriormente.
+
+![image](https://github.com/BrunoVAranha/CatRace/assets/49883183/ebb5a688-b7bf-402f-9e1e-4d30188cc067)     ![image](https://github.com/BrunoVAranha/CatRace/assets/49883183/68cd140a-31bd-4487-ad72-0d45a988a9fc)
+
 
 ## 2.
-### Desenho dos três círculos:
-No triângulo de sierpinski, a cada frame, calculamos um triângulo e o desenhamos sobre um ponto médio entre o triângulo principal e o triângulo gerado.  
-Para desenhar os círculos, mantemos um raio fixo (0.9f), e a cada frame geramos um ângulo aleatório, que será multiplicado seu pelo seno e cosseno para gerarmos as coordenadas do ponto de cada círculo.  
-Por fim, somamos `m_P` a um dos pontos do triângulo principal para que haja a distribuição dos pontos entre três círculos, e dividimos por quatro para que eles fiquem visíveis.  
-Quando 1500 pontos forem distribuidos entre os três círculos, sinalizamos que o círculo foi desenhado, e o contador de pontos reseta.  
-![image](https://github.com/BrunoVAranha/UfabcOpenGL/assets/49883183/d8f5bf28-c850-4899-8b24-5a9b987c0f17)  
+### Antes da execução da janela:
+#### (window.cpp)  
+São criadas as variáveis que indicam qual gato a câmera irá seguir, começando no gato branco. A barra de espaço muda o foco da câmera.
+Em seguida, são gerados os número aleatório que serão a velocidade de cada gato (o quanto cada um irá caminhar no eixo Z a cada frame).
+![image](https://github.com/BrunoVAranha/CatRace/assets/49883183/54b8aed3-366d-4188-bf9a-94216c9cbc48)
+
 
 ## 3.
-### Desenho das duas retas:
-Obs: a explicação abaixo se refere as sub-retas que compôem cada uma das duas retas do símbolo
-Começamos escolhendo os dois pontos que serão o limite inferior e superior da reta.    
-`num_points_reta` é a variável que diz quantas posições diferentes cada ponto pode ocupar, e `offset` é o deslocamento (no caso, sempre para a esquerda).  
-Quando 500 pontos estiverem distribuídos aleatoriamente entre as 120 posições possíveis, o valor de `offset` é incrementado, e a próxima sub-reta passa a ser desenhada.  
-Isso é feito um certo número de vezes, até que a segunda reta comece a ser desenhada em um ponto de partida mais distante, para que haja o espaço entre as duas retass do símbolo.
-        RETA1              | RETA2
-:-------------------------:|:-------------------------:
-![image](https://github.com/BrunoVAranha/UfabcOpenGL/assets/49883183/d5da9bdd-7e44-44a1-8d38-bfa1e63cb2d0)   |  ![image](https://github.com/BrunoVAranha/UfabcOpenGL/assets/49883183/d4422f60-d218-4be1-b90d-9b79a0e996af)
+### Ínicio da corrida:
+#### (window.cpp -> onPaint())  
+Em cada frame: se a corrida não acabou, o gato tem sua posição alterada no eixo Z conforme a velocidade, e a função translate atualiza sua posição no mundo. Se o gato em questão estiver e foco, a função `syncGato` então sincroniza a câmera com o gato.  
+![image](https://github.com/BrunoVAranha/CatRace/assets/49883183/75316234-6637-40b9-9fb1-3eba51807b8c)  
+
+#### (camera.cpp -> syncGato())  
+`m_eye`: A câmera se posiciona no eixo X do gato, um pouco acima do seu eixo Y (para não ficar dentro dele), e um pouco atrás do seu eixo Z (para vermos a cabeça do gato).  
+
+`m_at`: O ponto para onde a câmera deve olhar também é atualizado a cada passo do gato. Ele é configurado para estar sempre um pouco em frente ao gato.  
+![image](https://github.com/BrunoVAranha/CatRace/assets/49883183/f089804d-8ddc-4260-b9f2-fa165cfc2d8b)  
+
+
+## 4.
+### Fim da corrida:
+No fim de cada frame: se um gato alcança a linha de chegada (percorre uma distância definida), `fimCorrida` passa a ser true e consequentemente todos os gatos param de se mover.  
+![image](https://github.com/BrunoVAranha/CatRace/assets/49883183/b890f5e6-b315-452f-96a9-1d79f952456b)
+
+
+
 
 
 
