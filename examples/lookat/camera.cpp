@@ -17,7 +17,6 @@ void Camera::trocarAlturaCamera(float y){
 }
 
 void Camera::syncGato(glm::vec3 const &gato_posicao){
-
   m_eye.x = gato_posicao.x;
   m_eye.y = gato_posicao.y + 1.0f;
   m_eye.z = gato_posicao.z - 0.3f;
